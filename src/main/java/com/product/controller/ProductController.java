@@ -29,7 +29,7 @@ public class ProductController {
 	ProductService productService;
 	
 	@GetMapping
-	public ResponseEntity<?> getAllproducts() {
+	public ResponseEntity<?> getAllProductList() {
 		List<Product> list = new ArrayList<Product>();
 		try {
 			list = productService.getAllProducts();
@@ -41,7 +41,7 @@ public class ProductController {
 	
 	
 	@GetMapping(value="/search",  produces="application/json")
-	public ResponseEntity<Object> searchProducts(
+	public ResponseEntity<Object> searchProductList(
 	        @RequestParam(required = false) String productName,
 	        @RequestParam(required = false) Integer minPrice,
 	        @RequestParam(required = false) Integer maxPrice,
@@ -49,14 +49,14 @@ public class ProductController {
 	        @RequestParam(required = false) Date maxPostedDate) {
 		  List<Product> list = null;
 		  if(productName!=null) {
-			  list =  productService.searchByproductName(productName);
+			  list =  productService.searchProductByName(productName);
 		  }else if(minPrice>0 && maxPrice>0) {
 			  list = productService.searchByMinandMaxprice(minPrice, maxPrice);
 		  }else if(minPostedDate!=null && maxPostedDate!=null) {
 			  list = productService.searchByPostedDate(minPostedDate, maxPostedDate);
 		  }
 		  else {
-			  return new ResponseEntity<>("Please give Atlease one Parameter to Search the products", HttpStatus.BAD_REQUEST);
+			  return new ResponseEntity<>("Please give at least one Parameter to Search the products", HttpStatus.BAD_REQUEST);
 		  }
 		  
 				return new ResponseEntity<>(list, HttpStatus.OK);
@@ -65,21 +65,22 @@ public class ProductController {
 	
 	
 	@PostMapping
-	public ResponseEntity<?> createProduct(@RequestBody Product product) {
+	public ResponseEntity<?> createProductList(@RequestBody Product product) {
 		if (product.getPrice() > 10000) {
 			return new ResponseEntity<>("Price must not exceed $10,000.", HttpStatus.BAD_REQUEST);
 		}
-		return productService.saveproduct(product);
+		return productService.saveProduct(product);
 	}
 	
 	@PutMapping("/{productId}")
-	public ResponseEntity<?>  updateproduct(@PathVariable Long productId, @RequestBody Product product){
+	public ResponseEntity<?>  updateProductList(@PathVariable Long productId, @RequestBody Product product){
 		return productService.updateProduct(product, productId);
 	}
 	
-	
+
+
 	@DeleteMapping("/{productId}")
-	public ResponseEntity<?>   deleteProfuct(@PathVariable Long productId){
+	public ResponseEntity<?>   deleteProductById(@PathVariable Long productId){
 		return productService.deleteProduct(productId);
 	}
 	
@@ -89,12 +90,13 @@ public class ProductController {
 	}
 	
 	@PutMapping("/approval-queue/{approvalId}/approve")
-	public ResponseEntity<?> approveproduct(@PathVariable Long approvalId){
+	public ResponseEntity<?> approveProductById(@PathVariable Long approvalId){
 		return productService.approveProducts(approvalId);
 	}
 	
 	@PutMapping("/approval-queue/{approvalId}/reject")
-	public ResponseEntity<?> rejectproduct(@PathVariable Long approvalId){
+	public ResponseEntity<?> rejectProductById
+			(@PathVariable Long approvalId){
 		return productService.rejectProducts(approvalId);
 	}
 	

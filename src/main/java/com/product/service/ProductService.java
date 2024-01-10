@@ -33,7 +33,7 @@ public class ProductService {
 		return productRepository.findByActiveTrueOrderByPostedDateDesc();
 	}
 	
-	public List<Product>  searchByproductName(String productName){
+	public List<Product>  searchProductByName(String productName){
 		return productRepository.findByProductName(productName);
 	}
 	
@@ -46,7 +46,7 @@ public class ProductService {
 	}
 	
 
-	public ResponseEntity<?> saveproduct(Product product) {
+	public ResponseEntity<?> saveProduct(Product product) {
 		
 		if(product.getPrice() > 5000) {
 			product.setApprovalQueue(true);
